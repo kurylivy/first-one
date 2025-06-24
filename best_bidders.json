@@ -1,10 +1,10 @@
 {
   "girl": {
-    "number": 3,
-    "sum": 100
+    "number": 5,
+    "sum": 200
   },
   "boy": {
     "number": 3,
-    "sum": 100
+    "sum": 120
   }
 }
