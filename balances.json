@@ -2,20 +2,20 @@
   "jars": [
     {
       "ownerName": "Сергій К.",
+      "title": "Дівчинка",
+      "amount": 0,
+      "ownerIcon": "https://jar-img.monobank.com.ua/N92.30.0036346687.jpg?ts=2025-06-24T18:38:35.141200145",
+      "currency": 980,
+      "jarId": "6PHoyhNjPQ"
+    },
+    {
+      "ownerName": "Сергій К.",
       "title": "Хлопчик",
       "amount": 0,
       "ownerIcon": "https://ava-img.monobank.com.ua/NqJAEHONJZ4lEaerJztWuxlnEAHDhdWsso-xJZMsesg=.jpg",
       "currency": 980,
       "jarId": "4nTFrZ1yQg"
-    },
-    {
-      "ownerName": "Антон Г.",
-      "title": "На податки",
-      "amount": 4500002,
-      "ownerIcon": "https://ava-img.monobank.com.ua/NqJAEHONJZ4lEaerJztWu3vUGcrkxJpoxG2iulILC44=.jpg",
-      "currency": 980,
-      "jarId": "AZduYj6iaM"
     }
   ],
-  "updated_at": "2025-06-24T15:41:02.083409+00:00"
+  "updated_at": "2025-06-24T15:41:13.972047+00:00"
 }
