@@ -9,7 +9,7 @@ from telegram import Update
 from telegram.ext import ApplicationBuilder, ContextTypes, MessageHandler, filters
 
 BEST_BIDDERS_FILE = "best_bidders.json"
-SECRETS_PATH = "~/.first-one-secrets"
+SECRETS_PATH = "/home/pi/.first-one-secrets"
 
 def read_secrets(secrets_path=SECRETS_PATH):
     """Зчитує всі змінні з .secrets у словник"""

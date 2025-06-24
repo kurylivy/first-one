@@ -18,7 +18,7 @@ from datetime import datetime, timezone
 import base64
 
 BALANCES_FILEPATH = "balances.json"
-SECRETS_PATH = "~/.first-one-secrets"
+SECRETS_PATH = "/home/pi/.first-one-secrets"
 
 def read_secrets(secrets_path=SECRETS_PATH):
     """Зчитує всі змінні з .secrets у словник"""
