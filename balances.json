@@ -1,0 +1,21 @@
+{
+  "jars": [
+    {
+      "ownerName": "Антон Г.",
+      "title": "На податки",
+      "amount": 4500002,
+      "ownerIcon": "https://ava-img.monobank.com.ua/NqJAEHONJZ4lEaerJztWu3vUGcrkxJpoxG2iulILC44=.jpg",
+      "currency": 980,
+      "jarId": "AZduYj6iaM"
+    },
+    {
+      "ownerName": "Інша банка",
+      "title": "На щось інше",
+      "amount": 123456,
+      "ownerIcon": "https://ava-img.monobank.com.ua/...",
+      "currency": 980,
+      "jarId": "BZtPj2hbbC"
+    }
+  ],
+  "updated_at": "2025-06-24T12:00:00Z"
+}
