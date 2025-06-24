@@ -1,0 +1,27 @@
+.bg-pink {
+    background: #FFC0CB;
+}
+.bg-sky {
+    background: #87CEFA;
+}
+.jar-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #fff;
+}
+.balance {
+    font-size: 2rem;
+    font-weight: bold;
+}
+.donate-btn {
+    min-width: 90px;
+    margin: 0 0.3rem 0.5rem 0.3rem;
+    font-weight: 600;
+}
+@media (max-width: 767.98px) {
+    .card {
+        margin: 2rem 0;
+    }
+}
