@@ -4,7 +4,7 @@ function formatUAH(amount) {
 
 function renderDonateButtons(jarId, prefix) {
     if (!jarId) return;
-    const amounts = [20, 50, 100];
+    const amounts = [20, 40, 100];
     const container = document.getElementById(`${prefix}-donate`);
     container.innerHTML = amounts.map(amount =>
         `<a class="btn btn-success donate-btn" href="https://send.monobank.ua/jar/${jarId}?amount=${amount}" target="_blank" rel="noopener noreferrer">${amount} грн</a>`
