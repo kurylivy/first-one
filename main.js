@@ -1,13 +1,22 @@
+// Ініціалізуємо всі tooltip-и bootstrap
+document.addEventListener('DOMContentLoaded', function() {
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+        new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+});
+
+
 function formatUAH(amount) {
     return (amount / 100).toLocaleString('uk-UA', {style: 'currency', currency: 'UAH', minimumFractionDigits: 2});
 }
 
 function renderDonateButtons(jarId, prefix) {
     if (!jarId) return;
-    const amounts = [100, 200, 500];
+    const amounts = [20, 50, 100];
     const container = document.getElementById(`${prefix}-donate`);
     container.innerHTML = amounts.map(amount =>
-        `<a class="btn btn-success donate-btn" href="https://send.monobank.ua/jar/${jarId}?t=${amount}" target="_blank" rel="noopener noreferrer">${amount} грн</a>`
+        `<a class="btn btn-success donate-btn" href="https://send.monobank.ua/jar/${jarId}?amount=${amount}" target="_blank" rel="noopener noreferrer">${amount} грн</a>`
     ).join("");
 }
 
@@ -53,3 +62,28 @@ async function updateJars() {
 
 updateJars();
 setInterval(updateJars, 60000);
+
+async function updateBestBidders() {
+    try {
+        const response = await fetch('best_bidders.json', {cache: 'no-store'});
+        if (!response.ok) throw new Error('best_bidders.json не знайдено');
+        const data = await response.json();
+        // Для хлопчика (ліва банка)
+        if (data.boy && data.boy.number !== undefined && data.boy.sum !== undefined) {
+            document.getElementById('jar1-best').innerHTML =
+                `<span class="fw-bold">Найбільша ставка:</span> Учасник №${data.boy.number}, ${data.boy.sum} грн`;
+        }
+        // Для дівчинки (права банка)
+        if (data.girl && data.girl.number !== undefined && data.girl.sum !== undefined) {
+            document.getElementById('jar2-best').innerHTML =
+                `<span class="fw-bold">Найбільша ставка:</span> Учасник №${data.girl.number}, ${data.girl.sum} грн`;
+        }
+    } catch (e) {
+        document.getElementById('jar1-best').innerText = '';
+        document.getElementById('jar2-best').innerText = '';
+    }
+}
+
+// Викликати при старті і періодично
+updateBestBidders();
+setInterval(updateBestBidders, 60000);
