@@ -82,59 +82,23 @@
     </div>
 </div>
 <script>
-/**
- * Заміни ці ID на свої реальні jarId з публічних сторінок Monobank банок.
- * Наприклад: jar1Id = "AZduYj6iaM"
- */
-const jar1Id = 'AZduYj6iaM'; // <-- ВСТАВ СВІЙ ПЕРШИЙ jarId (короткий)
-const jar2Id = 'AZduYj6iaM'; // <-- ВСТАВ СВІЙ ДРУГИЙ jarId (короткий)
+// ВСТАВ СВОЇ longJarId! (запитай у когось, хто вже отримав, або отримай через POST /api/handler)
+const jar1LongId = '5hBeif8Yrb4iL8wnp2P3R5XFotKdgk8i'; // <-- ВСТАВ ПЕРШИЙ longJarId
+const jar2LongId = '5hBeif8Yrb4iL8wnp2P3R5XFotKdgk8i'; // <-- ВСТАВ ДРУГИЙ longJarId
 
-/**
- * Отримує довгий jarId через API send.monobank.ua
- * @param {string} shortJarId
- * @returns {Promise<string>} extJarId (longJarId)
- */
-async function getLongJarId(shortJarId) {
-    const response = await fetch('https://send.monobank.ua/api/handler', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-            "c": "hello",
-            "clientId": shortJarId,
-            "Pc": Math.random().toString(36).substring(2)
-        })
-    });
-    if (!response.ok) throw new Error('Не вдалося отримати longJarId');
-    const data = await response.json();
-    if (!data.extJarId) throw new Error('extJarId не знайдено');
-    return data.extJarId;
-}
+const proxy = 'https://corsproxy.io/?';
 
-/**
- * Отримує дані банки через longJarId
- * @param {string} longJarId
- * @returns {Promise<object>} jarData
- */
 async function getJarInfo(longJarId) {
-    const response = await fetch(`https://api.monobank.ua/bank/jar/${longJarId}`);
+    const url = proxy + encodeURIComponent(`https://api.monobank.ua/bank/jar/${longJarId}`);
+    const response = await fetch(url);
     if (!response.ok) throw new Error('Не вдалося завантажити дані банки');
     return await response.json();
 }
 
-/**
- * Форматує суму в гривнях
- * @param {number} amount
- * @returns {string}
- */
 function formatUAH(amount) {
     return (amount / 100).toLocaleString('uk-UA', { style: 'currency', currency: 'UAH', minimumFractionDigits: 2 });
 }
 
-/**
- * Оновлює інформацію про банку на сторінці
- * @param {object} jarData
- * @param {string} prefix
- */
 function renderJar(jarData, prefix) {
     document.getElementById(prefix + '-avatar').src = jarData.ownerIcon || 'https://placehold.co/64x64?text=?';
     document.getElementById(prefix + '-title').innerText = jarData.title || 'Без назви';
@@ -144,17 +108,14 @@ function renderJar(jarData, prefix) {
         : 'Немає даних';
 }
 
-// Головна функція
 async function updateJars() {
-    // Масив з jarId та префіксами для рендеру
     const jars = [
-        { id: jar1Id, prefix: 'jar1' },
-        { id: jar2Id, prefix: 'jar2' }
+        { longId: jar1LongId, prefix: 'jar1' },
+        { longId: jar2LongId, prefix: 'jar2' }
     ];
     for (const jar of jars) {
         try {
-            const longJarId = await getLongJarId(jar.id);
-            const jarData = await getJarInfo(longJarId);
+            const jarData = await getJarInfo(jar.longId);
             renderJar(jarData, jar.prefix);
         } catch (e) {
             document.getElementById(jar.prefix + '-title').innerText = 'Помилка';
@@ -163,10 +124,7 @@ async function updateJars() {
     }
 }
 
-// Оновлюємо при завантаженні
 updateJars();
-
-// Можна періодично оновлювати (наприклад, кожні 60 секунд)
 setInterval(updateJars, 60000);
 </script>
 </body>
