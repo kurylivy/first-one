@@ -1,12 +1,12 @@
 {
   "jars": [
     {
-      "ownerName": "Антон Г.",
-      "title": "На податки",
-      "amount": 4500002,
-      "ownerIcon": "https://ava-img.monobank.com.ua/NqJAEHONJZ4lEaerJztWu3vUGcrkxJpoxG2iulILC44=.jpg",
+      "ownerName": "Сергій К.",
+      "title": "Хлопчик",
+      "amount": 0,
+      "ownerIcon": "https://ava-img.monobank.com.ua/NqJAEHONJZ4lEaerJztWuxlnEAHDhdWsso-xJZMsesg=.jpg",
       "currency": 980,
-      "jarId": "AZduYj6iaM"
+      "jarId": "4nTFrZ1yQg"
     },
     {
       "ownerName": "Антон Г.",
@@ -17,5 +17,5 @@
       "jarId": "AZduYj6iaM"
     }
   ],
-  "updated_at": "2025-06-24T15:36:02.909461+00:00"
+  "updated_at": "2025-06-24T15:38:15.144622+00:00"
 }
