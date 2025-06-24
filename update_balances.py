@@ -3,15 +3,11 @@
 update_balances.py
 
 Оновлює файл balances.json у корені репозиторію актуальними балансами Monobank-банок.
-Можна запускати на Raspberry Pi по cron.
+Пушить зміни у GitHub лише якщо змінився баланс (amount) або зображення (ownerIcon) хоча б для однієї банки.
 
-Додатково: автоматично пушить balances.json у GitHub.
-Усі налаштування (GITHUB_TOKEN, REPO, BRANCH, LONG_JAR_ID_1, LONG_JAR_ID_2) — у файлі .secrets у такому вигляді:
-GITHUB_TOKEN=...
-REPO=owner/repo
-BRANCH=main
-LONG_JAR_ID_1=...
-LONG_JAR_ID_2=...
+Налаштування (GITHUB_TOKEN, REPO, BRANCH, LONG_JAR_ID_1, LONG_JAR_ID_2) — у .secrets
+
+Автор: github.com/horodchukanton
 """
 
 import requests
@@ -35,7 +31,6 @@ def read_secrets(secrets_path=SECRETS_PATH):
             if '=' in line:
                 k, v = line.strip().split("=", 1)
                 secrets[k.strip()] = v.strip()
-    # Перевіряємо обов'язкові поля
     required = ["GITHUB_TOKEN", "REPO", "BRANCH", "LONG_JAR_ID_1", "LONG_JAR_ID_2"]
     for req in required:
         if req not in secrets:
@@ -43,16 +38,12 @@ def read_secrets(secrets_path=SECRETS_PATH):
             sys.exit(1)
     return secrets
 
-# --- Monobank API ---
-
 def get_jar_info(long_jar_id):
     """Отримати дані банки по longJarId через офіційний API"""
     url = f"https://api.monobank.ua/bank/jar/{long_jar_id}"
     r = requests.get(url, timeout=15)
     r.raise_for_status()
     return r.json()
-
-# --- GitHub API ---
 
 def get_file_sha(token, repo, path, branch):
     """Повертає SHA існуючого файлу (щоб оновити його через API)"""
@@ -80,7 +71,28 @@ def update_github_file(token, repo, path, content, message, branch, sha=None):
         raise Exception("Не вдалося оновити файл у репозиторії")
     print(f"balances.json оновлено у GitHub ({r.json()['content']['html_url']})")
 
-# --- Основна логіка ---
+def only_essential(jars):
+    """Повертає список словників із лише ключами, за якими порівнюємо зміни."""
+    return [
+        {
+            "amount": jar.get("amount"),
+            "ownerIcon": jar.get("ownerIcon")
+        }
+        for jar in jars
+    ]
+
+def load_previous_essentials(filepath):
+    """Завантажує попередні amount та ownerIcon з balances.json, якщо файл є."""
+    if not os.path.exists(filepath):
+        return None
+    try:
+        with open(filepath, encoding="utf-8") as f:
+            data = json.load(f)
+            if "jars" in data:
+                return only_essential(data["jars"])
+    except Exception as e:
+        print(f"Не вдалося завантажити попередній balances.json: {e}", file=sys.stderr)
+    return None
 
 def main():
     secrets = read_secrets(SECRETS_PATH)
@@ -89,6 +101,10 @@ def main():
     branch = secrets["BRANCH"]
     long_jar_ids = [secrets["LONG_JAR_ID_1"], secrets["LONG_JAR_ID_2"]]
 
+    # 1. Завантажити попередній стан ДО оновлення balances.json
+    previous_essentials = load_previous_essentials(BALANCES_FILEPATH)
+
+    # 2. Отримати актуальні дані
     jars = []
     for long_jar_id in long_jar_ids:
         try:
@@ -111,16 +127,26 @@ def main():
                 "jarId": long_jar_id,
                 "error": str(e)
             })
+
     balances = {
         "jars": jars,
         "updated_at": datetime.now(timezone.utc).isoformat()
     }
-    # Запис локально
+    # 3. Порівняти до оновлення файлу
+    current_essentials = only_essential(jars)
+    if previous_essentials == current_essentials:
+        print("Баланс і зображення не змінились. Коміт у GitHub не потрібен.")
+        # Все одно оновимо локальний файл для консистентності
+        with open(BALANCES_FILEPATH, "w", encoding="utf-8") as f:
+            json.dump(balances, f, ensure_ascii=False, indent=2)
+        return
+
+    # 4. Записати файл (якщо будуть зміни — пуш)
     with open(BALANCES_FILEPATH, "w", encoding="utf-8") as f:
         json.dump(balances, f, ensure_ascii=False, indent=2)
     print("Оновлено balances.json локально")
 
-    # Пуш у GitHub
+    # 5. Пуш у GitHub
     sha = get_file_sha(github_token, repo, BALANCES_FILEPATH, branch)
     update_github_file(
         github_token,
