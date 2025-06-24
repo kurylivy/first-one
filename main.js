@@ -1,12 +1,3 @@
-// Ініціалізуємо всі tooltip-и bootstrap
-document.addEventListener('DOMContentLoaded', function() {
-    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-    tooltipTriggerList.forEach(function (tooltipTriggerEl) {
-        new bootstrap.Tooltip(tooltipTriggerEl);
-    });
-});
-
-
 function formatUAH(amount) {
     return (amount / 100).toLocaleString('uk-UA', {style: 'currency', currency: 'UAH', minimumFractionDigits: 2});
 }
@@ -60,9 +51,6 @@ async function updateJars() {
     }
 }
 
-updateJars();
-setInterval(updateJars, 60000);
-
 async function updateBestBidders() {
     try {
         const response = await fetch('best_bidders.json', {cache: 'no-store'});
@@ -84,6 +72,17 @@ async function updateBestBidders() {
     }
 }
 
-// Викликати при старті і періодично
-updateBestBidders();
-setInterval(updateBestBidders, 60000);
+// Ініціалізуємо всі tooltip-и bootstrap
+document.addEventListener('DOMContentLoaded', function() {
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+        new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+
+    // Викликати при старті і періодично
+    updateJars();
+    updateBestBidders();
+
+    setInterval(updateJars, 60000);
+    setInterval(updateBestBidders, 60000);
+});
