@@ -90,4 +90,88 @@
             </div>
         </div>
     </div>
+</div>
+<script>
+/**
+ * Очікується файл balances.json такого формату:
+ * {
+ *   "jars": [
+ *     {
+ *       "ownerName": "Антон Г.",
+ *       "title": "На податки",
+ *       "amount": 4500002,
+ *       "ownerIcon": "https://ava-img.monobank.com.ua/...",
+ *       "currency": 980,
+ *       "jarId": "AZduYj6iaM"
+ *     },
+ *     {
+ *       "ownerName": "Інша банка",
+ *       "title": "На щось інше",
+ *       "amount": 123456,
+ *       "ownerIcon": "https://ava-img.monobank.com.ua/...",
+ *       "currency": 980,
+ *       "jarId": "BZtPj2hbbC"
+ *     }
+ *   ],
+ *   "updated_at": "2025-06-24T12:00:00Z"
+ * }
+ */
 
+function formatUAH(amount) {
+    return (amount / 100).toLocaleString('uk-UA', {style: 'currency', currency: 'UAH', minimumFractionDigits: 2});
+}
+
+function renderDonateButtons(jarId, prefix) {
+    if (!jarId) return;
+    const amounts = [100, 200, 500];
+    const container = document.getElementById(`${prefix}-donate`);
+    container.innerHTML = amounts.map(amount =>
+        `<a class="btn btn-success donate-btn" href="https://send.monobank.ua/jar/${jarId}?t=${amount}" target="_blank" rel="noopener noreferrer">${amount} грн</a>`
+    ).join("");
+}
+
+function renderJar(jarData, prefix) {
+    document.getElementById(prefix + '-avatar').src = jarData.ownerIcon || 'https://placehold.co/64x64?text=?';
+    document.getElementById(prefix + '-title').innerText = jarData.title || 'Без назви';
+    document.getElementById(prefix + '-owner').innerText = jarData.ownerName || '';
+    document.getElementById(prefix + '-balance').innerText = (jarData.amount !== undefined)
+        ? formatUAH(jarData.amount)
+        : 'Немає даних';
+    renderDonateButtons(jarData.jarId, prefix);
+}
+
+function renderUpdatedAt(updated_at) {
+    if (!updated_at) return;
+    let el = document.getElementById('updated-at');
+    if (!el) {
+        el = document.createElement('div');
+        el.id = 'updated-at';
+        el.className = "text-center mt-3 text-muted";
+        document.body.appendChild(el);
+    }
+    el.innerText = "Останнє оновлення: " + new Date(updated_at).toLocaleString('uk-UA');
+}
+
+async function updateJars() {
+    try {
+        const response = await fetch('balances.json', {cache: 'no-store'});
+        if (!response.ok) throw new Error('balances.json не знайдено');
+        const data = await response.json();
+        if (Array.isArray(data.jars)) {
+            if (data.jars[0]) renderJar(data.jars[0], 'jar1');
+            if (data.jars[1]) renderJar(data.jars[1], 'jar2');
+        }
+        renderUpdatedAt(data.updated_at);
+    } catch (e) {
+        document.getElementById('jar1-title').innerText = 'Помилка';
+        document.getElementById('jar1-balance').innerText = e.message;
+        document.getElementById('jar2-title').innerText = 'Помилка';
+        document.getElementById('jar2-balance').innerText = e.message;
+    }
+}
+
+updateJars();
+setInterval(updateJars, 60000);
+</script>
+</body>
+</html>
