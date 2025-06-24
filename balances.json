@@ -1,21 +1,23 @@
 {
   "jars": [
     {
-      "ownerName": "Сергій К.",
-      "title": "Дівчинка",
-      "amount": 10000,
-      "ownerIcon": "https://jar-img.monobank.com.ua/N92.30.0036346687.jpg?ts=2025-06-24T18:38:35.141200145",
-      "currency": 980,
-      "jarId": "6PHoyhNjPQ"
+      "ownerName": "Помилка",
+      "title": "Не вдалося отримати баланс (cuFZbB4sqy6C2xUAXDn4uPufuHYJVJX)",
+      "amount": null,
+      "ownerIcon": "",
+      "currency": null,
+      "jarId": "cuFZbB4sqy6C2xUAXDn4uPufuHYJVJX",
+      "error": "429 Client Error: Too Many Requests for url: https://api.monobank.ua/bank/jar/cuFZbB4sqy6C2xUAXDn4uPufuHYJVJX"
     },
     {
-      "ownerName": "Сергій К.",
-      "title": "Хлопчик",
-      "amount": 10000,
-      "ownerIcon": "https://ava-img.monobank.com.ua/NqJAEHONJZ4lEaerJztWuxlnEAHDhdWsso-xJZMsesg=.jpg",
-      "currency": 980,
-      "jarId": "4nTFrZ1yQg"
+      "ownerName": "Помилка",
+      "title": "Не вдалося отримати баланс (3Q1HCUFd3oZJVm1ycn7X57Jka9AkTRoY)",
+      "amount": null,
+      "ownerIcon": "",
+      "currency": null,
+      "jarId": "3Q1HCUFd3oZJVm1ycn7X57Jka9AkTRoY",
+      "error": "429 Client Error: Too Many Requests for url: https://api.monobank.ua/bank/jar/3Q1HCUFd3oZJVm1ycn7X57Jka9AkTRoY"
     }
   ],
-  "updated_at": "2025-06-24T16:26:02.135123+00:00"
+  "updated_at": "2025-06-24T21:26:02.492456+00:00"
 }
