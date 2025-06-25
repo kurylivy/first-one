@@ -59,12 +59,12 @@ async function updateBestBidders() {
         // Для хлопчика (ліва банка)
         if (data.boy && data.boy.number !== undefined && data.boy.sum !== undefined) {
             document.getElementById('jar1-best').innerHTML =
-                `<span class="fw-bold">Найбільша ставка:</span> Учасник №${data.boy.number}, ${data.boy.sum} грн`;
+                `<span class="fw-bold">Найбільша ставка:</span> Учасник №${data.boy.number}`; //, ${data.boy.sum} грн`;
         }
         // Для дівчинки (права банка)
         if (data.girl && data.girl.number !== undefined && data.girl.sum !== undefined) {
             document.getElementById('jar2-best').innerHTML =
-                `<span class="fw-bold">Найбільша ставка:</span> Учасник №${data.girl.number}, ${data.girl.sum} грн`;
+                `<span class="fw-bold">Найбільша ставка:</span> Учасник №${data.girl.number}`; //, ${data.girl.sum} грн`;
         }
     } catch (e) {
         document.getElementById('jar1-best').innerText = '';
