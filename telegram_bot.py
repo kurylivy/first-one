@@ -85,7 +85,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             raise ValueError
 
         best_bidders = load_best_bidders()
-        key = "boy" if gender_raw == 'х' else "girl"
+        key = "boy" if gender_raw in ('х', 'Х', 'x', 'X') else "girl"
 
         best_bidders[key] = {"number": number, "sum": total_sum}
         save_best_bidders(best_bidders)
